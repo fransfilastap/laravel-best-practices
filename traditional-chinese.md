@@ -1,6 +1,6 @@
 ![Laravel best practices](/images/logo-traditional-chinese.png?raw=true)
 
-本文件中列出的並不是 Laravel 版的 SOLID 原則、模式等。在本文件中，我們列出許多在實際 Laravel 專案中常常被忽略的一些最佳實踐。
+You might also want to check out the [real-world Laravel example application](https://github.com/alexeymezenin/laravel-realworld-example-app)
 
 ## 內容
 
@@ -39,6 +39,8 @@
 [以標準格式來儲存日期時間，並以 Accesor 或 Mutator 來修改日期格式](#以標準格式來儲存日期時間並以-accesor-或-mutator-來修改日期格式)
 
 [其他優良實踐](#其他優良實踐)
+
+[![Laravel example app](/images/laravel-real-world-banner.png?raw=true)](https://github.com/alexeymezenin/laravel-realworld-example-app)
 
 ### **單一職責原則**
 
@@ -410,10 +412,10 @@ return back()->with('message', __('app.article_added'));
 任務 | 標準工具 | 第三方工具
 ------------ | ------------- | -------------
 權限控制 | Policies | Entrust, Sentinel 或其他套件
-編譯資源 | Laravel Mix | Grunt, Gulp, 或其他第三方套件
-開發環境 | Homestead | Docker
+編譯資源 | Laravel Mix, Vite | Grunt, Gulp, 或其他第三方套件
+開發環境 | Laravel Sail, Homestead | Docker
 部署 | Laravel Forge | Deployer 或其他解決方案
-單元測試 | PHPUnit, Mockery | Phpspec
+單元測試 | PHPUnit, Mockery | Phpspec, Pest
 瀏覽器測試 | Laravel Dusk | Codeception
 DB | Eloquent | SQL, Doctrine
 樣板 | Blade | Twig
@@ -446,7 +448,7 @@ Model | 單數 | User | ~~Users~~
 hasOne 或 belongsTo 關聯 | 單數 | articleComment | ~~articleComments, article_comment~~
 所有其他關聯 | 複數 | articleComments | ~~articleComment, article_comments~~
 資料表 | 複數 | article_comments | ~~article_comment, articleComments~~
-Pivat Table 透視表 | 以字母順序排列的單數 Model 名稱 | article_user | ~~user_article, articles_users~~
+Pivot Table 透視表 | 以字母順序排列的單數 Model 名稱 | article_user | ~~user_article, articles_users~~
 資料表欄位| 使用 snake_case，並且不包含 Model 名稱 | meta_title | ~~MetaTitle; article_meta_title~~
 Model 屬性 | snake_case | $model->created_at | ~~$model->createdAt~~
 Foreign Key - 外鍵 | 以單數 Model 名稱後方加上 _id | article_id | ~~ArticleId, id_article, articles_id~~
@@ -463,6 +465,9 @@ View | kebab-case | show-filtered.blade.php | ~~showFiltered.blade.php, show_fil
 設定檔 | snake_case | google_calendar.php | ~~googleCalendar.php, google-calendar.php~~
 Contract (界面) | 形容詞或名詞 | AuthenticationInterface | ~~Authenticatable, IAuthentication~~
 Trait | 形容詞 | Notifiable | ~~NotificationTrait~~
+Trait [(PSR)](https://www.php-fig.org/bylaws/psr-naming-conventions/) | adjective | NotifiableTrait | ~~Notification~~
+Enum | singular | UserType |  ~~UserTypes~~, ~~UserTypeEnum~~
+FormRequest | singular | UpdateUserRequest |  ~~UpdateUserFormRequest~~, ~~UserFormRequest~~, ~~UserRequest~~
 
 [🔝 回到目錄](#內容)
 

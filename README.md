@@ -1,5 +1,7 @@
 ![Laravel best practices](/images/logo-english.png?raw=true)
 
+You might also want to check out the [real-world Laravel example application](https://github.com/alexeymezenin/laravel-realworld-example-app)
+
 Translations:
 
 [Nederlands](https://github.com/Protoqol/Beste-Laravel-Praktijken) (by [Protoqol](https://github.com/Protoqol))
@@ -18,7 +20,7 @@ Translations:
 
 [বাংলা](bangla.md) (by [Anowar Hossain](https://github.com/AnowarCST))
 
-[فارسی](persian.md) (by [amirhossein baghaie](https://github.com/amirbagh75))
+[فارسی](persian.md) (by [amirhossein baghaie](https://github.com/ohmydevops))
 
 [Português](https://github.com/jonaselan/laravel-best-practices) (by [jonaselan](https://github.com/jonaselan))
 
@@ -32,7 +34,7 @@ Translations:
 
 [Français](french.md) (by [Mikayil S.](https://github.com/mikayilsrt))
 
-[Polski](https://github.com/maciejjeziorski/laravel-best-practices-pl) (by [Maciej Jeziorski](https://github.com/maciejjeziorski))
+[Polski](polish.md) (by [Karol Pietruszka](https://github.com/pietrushek))
 
 [Türkçe](turkish.md) (by [Burak](https://github.com/ikidnapmyself))
 
@@ -44,7 +46,9 @@ Translations:
 
 [العربية](arabic.md) (by [ahmedsaoud31](https://github.com/ahmedsaoud31))
 
-It's not a Laravel adaptation of SOLID principles, patterns etc. Here you'll find the best practices which are usually ignored in real life Laravel projects.
+[اردو](urdu.md) (by [RizwanAshraf1](https://github.com/RizwanAshraf1))
+
+[![Laravel example app](/images/laravel-real-world-banner.png?raw=true)](https://github.com/alexeymezenin/laravel-realworld-example-app)
 
 ## Contents
 
@@ -63,6 +67,8 @@ It's not a Laravel adaptation of SOLID principles, patterns etc. Here you'll fin
 [Mass assignment](#mass-assignment)
 
 [Do not execute queries in Blade templates and use eager loading (N + 1 problem)](#do-not-execute-queries-in-blade-templates-and-use-eager-loading-n--1-problem)
+
+[Chunk data for data-heavy tasks](#chunk-data-for-data-heavy-tasks)
 
 [Comment your code, but prefer descriptive method and variable names over comments](#comment-your-code-but-prefer-descriptive-method-and-variable-names-over-comments)
 
@@ -104,22 +110,22 @@ public function getFullNameAttribute()
 Good:
 
 ```php
-public function getFullNameAttribute()
+public function getFullNameAttribute(): string
 {
     return $this->isVerifiedClient() ? $this->getFullNameLong() : $this->getFullNameShort();
 }
 
-public function isVerifiedClient()
+public function isVerifiedClient(): bool
 {
     return auth()->user() && auth()->user()->hasRole('client') && auth()->user()->isVerified();
 }
 
-public function getFullNameLong()
+public function getFullNameLong(): string
 {
     return 'Mr. ' . $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
 }
 
-public function getFullNameShort()
+public function getFullNameShort(): string
 {
     return $this->first_name[0] . '. ' . $this->last_name;
 }
@@ -129,7 +135,7 @@ public function getFullNameShort()
 
 ### **Fat models, skinny controllers**
 
-Put all DB related logic into Eloquent models or into Repository classes if you're using Query Builder or raw SQL queries.
+Put all DB related logic into Eloquent models.
 
 Bad:
 
@@ -156,7 +162,7 @@ public function index()
 
 class Client extends Model
 {
-    public function getWithNewOrders()
+    public function getWithNewOrders(): Collection
     {
         return $this->verified()
             ->with(['orders' => function ($q) {
@@ -198,7 +204,7 @@ public function store(PostRequest $request)
 
 class PostRequest extends Request
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             'title' => 'required|unique:posts|max:255',
@@ -240,7 +246,7 @@ public function store(Request $request)
 
 class ArticleService
 {
-    public function handleUploadedImage($image)
+    public function handleUploadedImage($image): void
     {
         if (!is_null($image)) {
             $image->move(public_path('images') . 'temp');
@@ -276,15 +282,15 @@ Good:
 ```php
 public function scopeActive($q)
 {
-    return $q->where('verified', 1)->whereNotNull('deleted_at');
+    return $q->where('verified', true)->whereNotNull('deleted_at');
 }
 
-public function getActive()
+public function getActive(): Collection
 {
     return $this->active()->get();
 }
 
-public function getArticles()
+public function getArticles(): Collection
 {
     return $this->whereHas('user', function ($q) {
             $q->active();
@@ -369,18 +375,36 @@ $users = User::with('profile')->get();
 
 [🔝 Back to contents](#contents)
 
-### **Comment your code, but prefer descriptive method and variable names over comments**
+### **Chunk data for data-heavy tasks**
+
+Bad ():
+
+```php
+$users = $this->get();
+
+foreach ($users as $user) {
+    ...
+}
+```
+
+Good:
+
+```php
+$this->chunk(500, function ($users) {
+    foreach ($users as $user) {
+        ...
+    }
+});
+```
+
+[🔝 Back to contents](#contents)
+
+### **Prefer descriptive method and variable names over comments**
 
 Bad:
 
 ```php
-if (count((array) $builder->getQuery()->joins) > 0)
-```
-
-Better:
-
-```php
-// Determine if there are any joins.
+// Determine if there are any joins
 if (count((array) $builder->getQuery()->joins) > 0)
 ```
 
@@ -425,7 +449,7 @@ The best way is to use specialized PHP to JS package to transfer the data.
 Bad:
 
 ```php
-public function isNormal()
+public function isNormal(): bool
 {
     return $article->type === 'normal';
 }
@@ -453,10 +477,10 @@ Prefer to use built-in Laravel functionality and community packages instead of u
 Task | Standard tools | 3rd party tools
 ------------ | ------------- | -------------
 Authorization | Policies | Entrust, Sentinel and other packages
-Compiling assets | Laravel Mix | Grunt, Gulp, 3rd party packages
-Development Environment | Homestead | Docker
+Compiling assets | Laravel Mix, Vite | Grunt, Gulp, 3rd party packages
+Development Environment | Laravel Sail, Homestead | Docker
 Deployment | Laravel Forge | Deployer and other solutions
-Unit testing | PHPUnit, Mockery | Phpspec
+Unit testing | PHPUnit, Mockery | Phpspec, Pest
 Browser testing | Laravel Dusk | Codeception
 DB | Eloquent | SQL, Doctrine
 Templates | Blade | Twig
@@ -506,6 +530,9 @@ View | kebab-case | show-filtered.blade.php | ~~showFiltered.blade.php, show_fil
 Config | snake_case | google_calendar.php | ~~googleCalendar.php, google-calendar.php~~
 Contract (interface) | adjective or noun | AuthenticationInterface | ~~Authenticatable, IAuthentication~~
 Trait | adjective | Notifiable | ~~NotificationTrait~~
+Trait [(PSR)](https://www.php-fig.org/bylaws/psr-naming-conventions/) | adjective | NotifiableTrait | ~~Notification~~
+Enum | singular | UserType |  ~~UserTypes~~, ~~UserTypeEnum~~
+FormRequest | singular | UpdateUserRequest |  ~~UpdateUserFormRequest~~, ~~UserFormRequest~~, ~~UserRequest~~
 
 [🔝 Back to contents](#contents)
 
@@ -534,7 +561,7 @@ Common syntax | Shorter and more readable syntax
 `Session::put('cart', $data)` | `session(['cart' => $data])`
 `$request->input('name'), Request::get('name')` | `$request->name, request('name')`
 `return Redirect::back()` | `return back()`
-`is_null($object->relation) ? null : $object->relation->id` | `optional($object->relation)->id`
+`is_null($object->relation) ? null : $object->relation->id` | `optional($object->relation)->id` (in PHP 8: `$object->relation?->id`)
 `return view('index')->with('title', $title)->with('client', $client)` | `return view('index', compact('title', 'client'))`
 `$request->has('value') ? $request->value : 'default';` | `$request->get('value', 'default')`
 `Carbon::now(), Carbon::today()` | `now(), today()`
@@ -548,7 +575,7 @@ Common syntax | Shorter and more readable syntax
 
 [🔝 Back to contents](#contents)
 
-### **Use IoC container or facades instead of new Class**
+### **Use IoC / Service container instead of new Class**
 
 new Class syntax creates tight coupling between classes and complicates testing. Use IoC container or facades instead.
 
@@ -617,15 +644,25 @@ public function getSomeDateAttribute($date)
 
 // View
 {{ $object->ordered_at->toDateString() }}
-{{ $object->ordered_at->some_date }}
+{{ $object->some_date }}
 ```
 
 [🔝 Back to contents](#contents)
 
 ### **Other good practices**
 
+Avoid using patterns and tools that are alien to Laravel and similar frameworks (i.e. RoR, Django). If you like Symfony (or Spring) approach for building apps, it's a good idea to use these frameworks instead.
+
 Never put any logic in routes files.
 
 Minimize usage of vanilla PHP in Blade templates.
+
+Use in-memory DB for testing.
+
+Do not override standard framework features to avoid problems related to updating the framework version and many other issues.
+
+Use modern PHP syntax where possible, but don't forget about readability.
+
+Avoid using View Composers and similar tools unless you really know what you're doing. In most cases, there is a better way to solve the problem.
 
 [🔝 Back to contents](#contents)

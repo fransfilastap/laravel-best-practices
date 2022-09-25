@@ -1,5 +1,7 @@
 ![Laravel best practices](/images/logo-english.png?raw=true)
 
+You might also want to check out the [real-world Laravel example application](https://github.com/alexeymezenin/laravel-realworld-example-app)
+
 অনুবাদঃ
 
 [Nederlands](https://github.com/Protoqol/Beste-Laravel-Praktijken) (by [Protoqol](https://github.com/Protoqol))
@@ -12,7 +14,7 @@
 
 [ภาษาไทย](thai.md) (by [kongvut sangkla](https://github.com/kongvut))
 
-[فارسی](persian.md) (by [amirhossein baghaie](https://github.com/amirbagh75))
+[فارسی](persian.md) (by [amirhossein baghaie](https://github.com/ohmydevops))
 
 [Português](https://github.com/jonaselan/laravel-best-practices) (by [jonaselan](https://github.com/jonaselan))
 
@@ -26,7 +28,7 @@
 
 [Français](french.md) (by [Mikayil S.](https://github.com/mikayilsrt))
 
-[Polski](https://github.com/maciejjeziorski/laravel-best-practices-pl) (by [Maciej Jeziorski](https://github.com/maciejjeziorski))
+[Polski](polish.md) (by [Karol Pietruszka](https://github.com/pietrushek))
 
 [Türkçe](turkish.md) (by [Burak](https://github.com/ikidnapmyself))
 
@@ -38,8 +40,9 @@
 
 [العربية](arabic.md) (by [ahmedsaoud31](https://github.com/ahmedsaoud31))
 
+[اردو](urdu.md) (by [RizwanAshraf1](https://github.com/RizwanAshraf1))
 
-এটা লারাভেল এর সাথে SOLID Principles বা Patterns সংযোজন নয়। এখানে আপনি সেরা অনুশীলন গুলা পাবেন যা বাস্তব জীবনে লারাভেল প্রজেক্টে সাধারণত অবহেলা করা হয়। 
+[![Laravel example app](/images/laravel-real-world-banner.png?raw=true)](https://github.com/alexeymezenin/laravel-realworld-example-app)
 
 ## সূচীপত্র
 
@@ -448,10 +451,10 @@ return back()->with('message', __('app.article_added'));
 কাজ | স্ট্যান্ডার্ড টুলস | থার্ডপার্টি টুলস
 ------------ | ------------- | -------------
 Authorization | Policies | Entrust, Sentinel and other packages
-Compiling assets | Laravel Mix | Grunt, Gulp, 3rd party packages
-Development Environment | Homestead | Docker
+Compiling assets | Laravel Mix, Vite | Grunt, Gulp, 3rd party packages
+Development Environment | Laravel Sail, Homestead | Docker
 Deployment | Laravel Forge | Deployer and other solutions
-Unit testing | PHPUnit, Mockery | Phpspec
+Unit testing | PHPUnit, Mockery | Phpspec, Pest
 Browser testing | Laravel Dusk | Codeception
 DB | Eloquent | SQL, Doctrine
 Templates | Blade | Twig
@@ -474,7 +477,7 @@ DB | MySQL, PostgreSQL, SQLite, SQL Server | MongoDB
  [PSR standards](http://www.php-fig.org/psr/psr-2/) অনুসরণ করুন।
  
  
- এছাড়াও, লারাভেল কমিউনিটি কর্তিক স্বীকৃত নেমিং কনভেনশন (নামকরণ) ফলো করা যায়ঃ
+ এছাড়াও, লারাভেল কমিউনিটি কর্তৃক স্বীকৃত নামকরণের রীতি(নেমিং কনভেনশন) অনুসরণ করা যায়ঃ
 
 কি | কিভাবে | ভাল | খারাপ
 ------------ | ------------- | ------------- | -------------
@@ -502,6 +505,9 @@ View | kebab-case | show-filtered.blade.php | ~~showFiltered.blade.php, show_fil
 Config | snake_case | google_calendar.php | ~~googleCalendar.php, google-calendar.php~~
 Contract (interface) | adjective or noun | AuthenticationInterface | ~~Authenticatable, IAuthentication~~
 Trait | adjective | Notifiable | ~~NotificationTrait~~
+Trait [(PSR)](https://www.php-fig.org/bylaws/psr-naming-conventions/) | adjective | NotifiableTrait | ~~Notification~~
+Enum | singular | UserType |  ~~UserTypes~~, ~~UserTypeEnum~~
+FormRequest | singular | UpdateUserRequest |  ~~UpdateUserFormRequest~~, ~~UserFormRequest~~, ~~UserRequest~~
 
 [🔝 সূচীপত্রে ফিরে যান](#সূচীপত্র)
 
@@ -572,7 +578,7 @@ $this->user->create($request->validated());
 
 ### **`.env` ফাইলের ডাটা সরাসরি নিবেন না**
 
-বরং ডাটা গুলোকে কনফিগ ফাইলের মধ্যে রাখুন এবং `config()` হেল্পার ফাংশন ব্যাবহার করে আপনার এপ্লিকেশনে ব্যাবহার করুন।
+বরং ডাটা গুলোকে কনফিগ ফাইলের মধ্যে রাখুন এবং `config()` হেল্পার ফাংশন ব্যাবহার করে আপনার এপ্লিকেশনে ব্যবহার করুন।
 
 খারাপঃ
 

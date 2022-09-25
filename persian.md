@@ -1,5 +1,7 @@
 ![روش های روش قابل قبول توسعه پروژه های مبتنی بر فریم ورک لاراول](/images/logo-persian.png?raw=true)
 
+You might also want to check out the [real-world Laravel example application](https://github.com/alexeymezenin/laravel-realworld-example-app)
+
 <div dir="rtl">
 
 ترجمه ها:
@@ -22,7 +24,7 @@
 
 [বাংলা](bangla.md) (by [Anowar Hossain](https://github.com/AnowarCST))
 
-[فارسی](persian.md) (by [Amirhossein baghaie](https://github.com/amirbagh75))
+[فارسی](persian.md) (by [Amirhossein baghaie](https://github.com/ohmydevops))
 
 [Português](https://github.com/jonaselan/laravel-best-practices) (by [jonaselan](https://github.com/jonaselan))
 
@@ -36,7 +38,7 @@
 
 [Français](french.md) (by [Mikayil S.](https://github.com/mikayilsrt))
 
-[Polski](https://github.com/maciejjeziorski/laravel-best-practices-pl) (by [Maciej Jeziorski](https://github.com/maciejjeziorski))
+[Polski](polish.md) (by [Karol Pietruszka](https://github.com/pietrushek))
 
 [Türkçe](turkish.md) (by [Burak](https://github.com/ikidnapmyself))
 
@@ -48,9 +50,11 @@
 
 [العربية](arabic.md) (by [ahmedsaoud31](https://github.com/ahmedsaoud31))
 
-<div dir="rtl">
+[اردو](urdu.md) (by [RizwanAshraf1](https://github.com/RizwanAshraf1))
 
-این مستندات درباره سازگاری لاراول با اصول SOLID یا Design Pattern ها و ... نیست. اینجا شما روش های اصولی توسعه پروژه های مبتنی بر لاراول رو پیدا میکنید که معمولا داخل پروژه ها در نظر گرفته نمیشوند.
+[![Laravel example app](/images/laravel-real-world-banner.png?raw=true)](https://github.com/alexeymezenin/laravel-realworld-example-app)
+
+<div dir="rtl">
 
 ## فهرست مطالب
 
@@ -95,7 +99,7 @@
 
 ### **اصل تک وظیفه ای بودن**
 
-هر class و هر methode باید یک وظیفه داشته باشد.
+هر class و هر method باید یک وظیفه داشته باشد.
 
 ❌ روش اشتباه:
 
@@ -498,7 +502,7 @@ let article = $('#article').val();
 
 [🔝 بازگشت به فهرست](#فهرست-مطالب)
 
-### **به جای استفاده مستقیم از متن ها در کد، از فایل های config و langugeus استفاده کنید!**
+### **به جای استفاده مستقیم از متن ها در کد، از فایل های config و languages استفاده کنید!**
 
 ❌ روش اشتباه:
 
@@ -539,10 +543,10 @@ return back()->with('message', __('app.article_added'));
 نیاز | ابزارهای رسمی لاراول | ابزارهای غیررسمی لاراول
 ------------ | ------------- | -------------
 Authorization | Policies | Entrust, Sentinel and other packages
-Compiling assets | Laravel Mix | Grunt, Gulp, 3rd party packages
-Development Environment | Homestead | Docker
+Compiling assets | Laravel Mix, Vite | Grunt, Gulp, 3rd party packages
+Development Environment | Laravel Sail, Homestead | Docker
 Deployment | Laravel Forge | Deployer and other solutions
-Unit testing | PHPUnit, Mockery | Phpspec
+Unit testing | PHPUnit, Mockery | Phpspec, Pest
 Browser testing | Laravel Dusk | Codeception
 DB | Eloquent | SQL, Doctrine
 Templates | Blade | Twig
@@ -596,6 +600,9 @@ View | kebab-case | show-filtered.blade.php | ~~showFiltered.blade.php, show_fil
 Config | snake_case | google_calendar.php | ~~googleCalendar.php, google-calendar.php~~
 Contract (interface) | صفت یا اسم | AuthenticationInterface | ~~Authenticatable, IAuthentication~~
 Trait | صفت | Notifiable | ~~NotificationTrait~~
+Trait [(PSR)](https://www.php-fig.org/bylaws/psr-naming-conventions/) | adjective | NotifiableTrait | ~~Notification~~
+Enum | singular | UserType |  ~~UserTypes~~, ~~UserTypeEnum~~
+FormRequest | singular | UpdateUserRequest |  ~~UpdateUserFormRequest~~, ~~UserFormRequest~~, ~~UserRequest~~
 
 <div dir="rtl">
 
@@ -744,11 +751,42 @@ public function getSomeDateAttribute($date)
 
 [🔝 بازگشت به فهرست](#فهرست-مطالب)
 
-### **دیگر قواعد توسعه روش قابل قبول (بدون فهرست)**
+### **در فایل های route خود هیچوقت منطق برنامه را قرار ندهید.**
 
-- در فایل های route خود هیچوقت منطق برنامه را قرار ندهید.
 
-- تا حد ممکن از vanilla PHP در فایل های blade استفاده نکنید.
+❌ روش اشتباه:
+
+</div>
+
+```php
+// Route
+Route::get('user/1', function (User $user) {
+    return new UserResource($user);
+});
+```
+<div dir="rtl">
+
+✔️ روش قابل قبول:
+
+</div>
+
+```php
+// Route
+Route::get('user/1', 'UserController@show');
+
+// Controlelr
+class UserController extends Controller 
+{
+    public function show(User $user) {
+        return new UserResource($user);
+    }
+}
+```
+<div dir="rtl">
+
+[🔝 بازگشت به فهرست](#فهرست-مطالب)
+
+### **تا حد ممکن از PHP خام در فایل های blade استفاده نکنید.**
 
 [🔝 بازگشت به فهرست](#فهرست-مطالب)
 

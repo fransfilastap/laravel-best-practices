@@ -1,5 +1,7 @@
 ![Laravel best practices](/images/logo-spanish.png?raw=true)
 
+You might also want to check out the [real-world Laravel example application](https://github.com/alexeymezenin/laravel-realworld-example-app)
+
 Traducciones:
 
 [Nederlands](https://github.com/Protoqol/Beste-Laravel-Praktijken) (por [Protoqol](https://github.com/Protoqol))
@@ -18,7 +20,7 @@ Traducciones:
 
 [বাংলা](bangla.md) (por [Anowar Hossain](https://github.com/AnowarCST))
 
-[فارسی](persian.md) (por [amirhossein baghaie](https://github.com/amirbagh75))
+[فارسی](persian.md) (por [amirhossein baghaie](https://github.com/ohmydevops))
 
 [Português](https://github.com/jonaselan/laravel-best-practices) (por [jonaselan](https://github.com/jonaselan))
 
@@ -32,7 +34,7 @@ Traducciones:
 
 [Français](french.md) (por [Mikayil S.](https://github.com/mikayilsrt))
 
-[Polski](https://github.com/maciejjeziorski/laravel-best-practices-pl) (por [Maciej Jeziorski](https://github.com/maciejjeziorski))
+[Polski](polish.md) (by [Karol Pietruszka](https://github.com/pietrushek))
 
 [Türkçe](turkish.md) (por [Burak](https://github.com/ikidnapmyself))
 
@@ -44,7 +46,9 @@ Traducciones:
 
 [العربية](arabic.md) (por [ahmedsaoud31](https://github.com/ahmedsaoud31))
 
-No se trata de una adaptación a Laravel de los principios SOLID ni de patrones, etcétera. Aquí encontrarás las mejores prácticas que, por lo general, son ignoradas en proyectos Laravel de la vida real.
+[اردو](urdu.md) (by [RizwanAshraf1](https://github.com/RizwanAshraf1))
+
+[![Laravel example app](/images/laravel-real-world-banner.png?raw=true)](https://github.com/alexeymezenin/laravel-realworld-example-app)
 
 ## Índice de contenido
 
@@ -453,10 +457,10 @@ Prioriza la utilización de funcionalidades integradas y los paquetes de la comu
 Tarea | Herramienta estándar | Herramientas de terceras personas
 ------------ | ------------- | -------------
 Autorización | Policies | Entrust, Sentinel y otros paquetes
-Compilar assets | Laravel Mix | Grunt, Gulp, paquetes de terceros
-Entorno de desarrollo | Homestead | Docker
+Compilar assets | Laravel Mix, Vite | Grunt, Gulp, paquetes de terceros
+Entorno de desarrollo | Laravel Sail, Homestead | Docker
 Deployment | Laravel Forge | Deployer y otras soluciones
-Unit testing | PHPUnit, Mockery | Phpspec
+Unit testing | PHPUnit, Mockery | Phpspec, Pest
 Testeo en el navegador | Laravel Dusk | Codeception
 Base de datos | Eloquent | SQL, Doctrine
 Plantillas | Blade | Twig
@@ -506,6 +510,9 @@ Vistas | kebab-case | show-filtered.blade.php | ~~showFiltered.blade.php, show_f
 Configuración | snake_case | google_calendar.php | ~~googleCalendar.php, google-calendar.php~~
 Contrato (interface) | adjetivo o sustantivo | AuthenticationInterface | ~~Authenticatable, IAuthentication~~
 Trait | adjetivo | Notifiable | ~~NotificationTrait~~
+Trait [(PSR)](https://www.php-fig.org/bylaws/psr-naming-conventions/) | adjective | NotifiableTrait | ~~Notification~~
+Enum | singular | UserType |  ~~UserTypes~~, ~~UserTypeEnum~~
+FormRequest | singular | UpdateUserRequest |  ~~UpdateUserFormRequest~~, ~~UserFormRequest~~, ~~UserRequest~~
 
 [🔝 Volver al índice](#índice-de-contenido)
 
